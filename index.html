@@ -95,7 +95,7 @@
 <div class="ticker">
   <div style="display:flex;align-items:center;gap:6px;"><div class="tdot"></div><span>MGC / GC Gold Futures Pre-Trade Dashboard</span></div>
   <div style="display:flex;align-items:center;gap:6px;"><span>PCR below 0.7 = bullish | 0.7-1.0 = neutral | above 1.0 = bearish</span></div>
-  <div style="display:flex;align-items:center;gap:6px;"><span>Options data via GLD — dynamic multiplier applied for gold futures price</span></div>
+  <div style="display:flex;align-items:center;gap:6px;"><span>Options via GLD — dynamic multiplier for gold futures price</span></div>
 </div>
 
 <div class="header">
@@ -117,7 +117,6 @@
 
 <div class="main">
 
-  <!-- LIVE MARKET -->
   <div class="panel">
     <div class="ptitle"><div class="ldot"></div>Live market data</div>
     <div class="dgrid g4">
@@ -135,7 +134,6 @@
     </div>
   </div>
 
-  <!-- OPTIONS -->
   <div class="panel">
     <div class="ptitle"><div class="adot"></div>Options intelligence — GLD auto-pulled</div>
     <div class="dgrid g5" style="margin-bottom:16px;">
@@ -152,7 +150,6 @@
     <div class="refrow"><div class="lupd" id="oupd">Fetching options...</div></div>
   </div>
 
-  <!-- FED WATCH -->
   <div class="panel">
     <div class="ptitle"><div style="width:6px;height:6px;border-radius:50%;background:var(--purple);"></div>Fed watch</div>
     <div class="dgrid g3" style="margin-bottom:14px;">
@@ -174,61 +171,306 @@
     </div>
   </div>
 
-  <!-- TRADINGVIEW CHART -->
+  <!-- INSTITUTIONAL DELTA HEDGE DASHBOARD -->
+  <div class="panel" style="padding:0;overflow:hidden;margin-bottom:16px;">
+    <div style="padding:14px 22px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--text-mid);"><span style="color:var(--gold)">AU</span> GOLD FUTURES · INSTITUTIONAL DELTA HEDGE DASHBOARD</div>
+      <div style="display:flex;align-items:center;gap:7px;"><div style="width:7px;height:7px;border-radius:50%;background:#ff8c42;animation:pulse 1s infinite;"></div><span style="font-family:'DM Mono',monospace;font-size:10px;color:#ff8c42;letter-spacing:.1em;">LIVE</span></div>
+    </div>
+
+    <div style="padding:14px 22px;">
+
+      <!-- AUTO PRICE ROW -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:4px;">
+          <span style="font-family:'DM Mono',monospace;font-size:26px;font-weight:700;color:var(--gold);">GCM26</span>
+          <span style="font-family:'DM Mono',monospace;font-size:20px;color:var(--text);" id="dash-price">--</span>
+          <span style="font-family:'DM Mono',monospace;font-size:13px;" id="dash-chg">--</span>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(212,168,71,.12);color:var(--gold);border:.5px solid rgba(212,168,71,.3);">COMEX GOLD FUTURES</span>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);" id="dash-range">Loading market data...</div>
+      </div>
+
+      <!-- TOP METRICS -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:11px;" class="dash-g5">
+        <div style="background:var(--bg3);border:.5px solid rgba(255,140,66,.3);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Dealer GEX</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:#ff8c42;">~$0</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">Regime transitioning</div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Net Delta Vol</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">-42,180</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">Contracts net sold</div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Put/Call OI</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;" id="dash-pcr-val">--</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;" id="dash-pcr-sub">Loading...</div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid rgba(255,140,66,.3);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Gamma Flip</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:#ff8c42;" id="dash-flip">--</div>
+          <div style="font-size:11px;color:#ff8c42;margin-top:3px;font-family:'DM Mono',monospace;">Max pain level</div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Days to Expiry</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--blue);" id="dash-dte">--</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;" id="dash-expiry">--</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px;" class="dash-g4">
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">COT Comm. Net</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--green);">+84,220</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">Hedgers adding long</div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">COT Spec. Net</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">-28,440</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">Funds reducing longs</div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Call Wall</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--blue);" id="dash-cwall">--</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">Resistance ceiling</div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Put Wall</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);" id="dash-pwall">--</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">Support floor</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div style="display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;">
+        <button onclick="setDashTab('dvol',this)" style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid rgba(212,168,71,.4);color:var(--gold);background:var(--gold);color:#1a1400;font-weight:700;letter-spacing:.06em;" id="dtab-dvol">Delta Volume</button>
+        <button onclick="setDashTab('gex',this)"      style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid var(--border);color:var(--text-dim);background:transparent;letter-spacing:.06em;" id="dtab-gex">GEX / OI</button>
+        <button onclick="setDashTab('cot',this)"      style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid var(--border);color:var(--text-dim);background:transparent;letter-spacing:.06em;" id="dtab-cot">COT Report</button>
+        <button onclick="setDashTab('darkpool',this)" style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid var(--border);color:var(--text-dim);background:transparent;letter-spacing:.06em;" id="dtab-darkpool">Dark Pool</button>
+        <button onclick="setDashTab('flow',this)"     style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid var(--border);color:var(--text-dim);background:transparent;letter-spacing:.06em;" id="dtab-flow">Options Flow</button>
+        <button onclick="setDashTab('greeks',this)"   style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid var(--border);color:var(--text-dim);background:transparent;letter-spacing:.06em;" id="dtab-greeks">Greeks</button>
+        <button onclick="setDashTab('seasonal',this)" style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid var(--border);color:var(--text-dim);background:transparent;letter-spacing:.06em;" id="dtab-seasonal">Seasonal</button>
+        <button onclick="setDashTab('levels',this)"   style="font-size:10px;font-family:'DM Mono',monospace;padding:6px 13px;border-radius:5px;cursor:pointer;border:.5px solid var(--border);color:var(--text-dim);background:transparent;letter-spacing:.06em;" id="dtab-levels">Key Levels</button>
+      </div>
+
+      <!-- TAB PANELS (content from uploaded dashboard) -->
+      <div id="dpanel-dvol" style="display:block;">
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;margin-bottom:11px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:.5px solid var(--border);">Delta Volume — Buy vs Sell pressure per 30-min bar</div>
+          <div id="dvBars2"></div>
+          <div style="height:.5px;background:var(--border);margin:12px 0;"></div>
+          <div style="margin-top:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;">CUMULATIVE DELTA — Session Total: <span style="color:var(--red);font-weight:700;">-42,180 contracts</span></div>
+          <div style="position:relative;width:100%;height:180px;"><canvas id="chartCumDelta2"></canvas></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Buy/Sell Volume Totals</div>
+            <div style="display:flex;gap:16px;margin-bottom:12px;">
+              <div><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;">Total Buy Vol</div><div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--green);">76,800</div></div>
+              <div><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;">Total Sell Vol</div><div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--red);">118,980</div></div>
+            </div>
+            <div style="background:var(--bg2);border-radius:3px;height:10px;overflow:hidden;"><div style="width:39%;height:100%;background:var(--green);border-radius:3px;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);margin-top:4px;"><span style="color:var(--green);">BUY 39%</span><span style="color:var(--red);">SELL 61%</span></div>
+          </div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Delta Volume By Session Phase</div>
+            <div style="position:relative;width:100%;height:140px;"><canvas id="chartDVPhase2"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="dpanel-gex" style="display:none;">
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;margin-bottom:11px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;padding-bottom:6px;border-bottom:.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+            <span>Gamma Exposure (GEX) by Strike — LIVE from Alpaca</span>
+            <span style="color:var(--green);font-size:9px;" id="gex-updated">Loading...</span>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px;">Positive GEX = dealers stabilize price. Negative GEX = dealers amplify moves. Flip zone = where GEX crosses zero.</div>
+          <div style="position:relative;width:100%;height:280px;"><canvas id="chartGEX2"></canvas></div>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;">
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);"><span style="width:10px;height:10px;border-radius:2px;background:rgba(0,229,160,.75);display:inline-block;"></span>POSITIVE GEX (stabilizing)</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);"><span style="width:10px;height:10px;border-radius:2px;background:rgba(255,77,106,.75);display:inline-block;"></span>NEGATIVE GEX (amplifying)</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);"><span style="width:10px;height:10px;border-radius:2px;background:rgba(255,140,66,.85);display:inline-block;"></span>NEAR CURRENT PRICE</span>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;padding-bottom:6px;border-bottom:.5px solid var(--border);display:flex;justify-content:space-between;">
+            <span>Open Interest — Calls vs Puts by Strike — LIVE from Alpaca</span>
+          </div>
+          <div style="position:relative;width:100%;height:280px;"><canvas id="chartOI2"></canvas></div>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;">
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);"><span style="width:10px;height:10px;border-radius:2px;background:rgba(0,229,160,.7);display:inline-block;"></span>CALL OI</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);"><span style="width:10px;height:10px;border-radius:2px;background:rgba(255,77,106,.7);display:inline-block;"></span>PUT OI</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="dpanel-cot" style="display:none;">
+        <div style="background:rgba(212,168,71,0.06);border:.5px solid rgba(212,168,71,0.3);border-radius:9px;padding:12px 16px;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);margin-bottom:3px;">COT Report — Published every Friday by CFTC</div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);">Free government data. Gold futures positions for commercials, large specs, and small specs.</div>
+          </div>
+          <a href="https://www.cftc.gov/dea/futures/deacmesf.htm" target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:var(--amber-bg);border:1px solid rgba(212,168,71,.4);border-radius:7px;padding:8px 14px;color:var(--gold);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;text-decoration:none;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open Latest CFTC COT Report
+          </a>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">COT Net Positions</div>
+            <div style="position:relative;width:100%;height:200px;"><canvas id="chartCOT2"></canvas></div>
+          </div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Position Breakdown</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:12px;color:var(--text);font-weight:500;">Commercials (Hedgers)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0 5px 10px;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">Net position</span><span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--green);">+84,220</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);margin-top:4px;"><span style="font-size:12px;color:var(--text);font-weight:500;">Large Specs (Funds)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0 5px 10px;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">Net position</span><span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--red);">-28,440</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;margin-top:4px;"><span style="font-size:12px;color:var(--text);font-weight:500;">Weekly OI change</span><span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--red);">-18,640</span></div>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Commercial Net Position — 12 Week History</div>
+          <div style="position:relative;width:100%;height:200px;"><canvas id="chartCOThist2"></canvas></div>
+        </div>
+      </div>
+
+      <div id="dpanel-darkpool" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:11px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Dark Pool Volume</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--blue);">38.4%</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">of total session volume</div></div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Block Trade $</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--gold);">$2.84B</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">12 institutional prints</div></div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Dark Pool Bias</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">62% SELL</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;font-family:'DM Mono',monospace;">Institutional sell dominance</div></div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Dark Pool Buy vs Sell Volume</div>
+          <div style="position:relative;width:100%;height:220px;"><canvas id="chartDarkPool2"></canvas></div>
+        </div>
+      </div>
+
+      <div id="dpanel-flow" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:11px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Put Premium Today</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">$67.2M</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;">Total put flow</div></div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Call Premium Today</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--green);">$7.1M</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;">Total call flow</div></div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Put/Call $ Ratio</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">9.5x</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;">Extreme put domination</div></div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Options Flow — Put/Call Premium Split</div>
+          <div style="position:relative;width:100%;height:200px;"><canvas id="chartFlowSplit2"></canvas></div>
+        </div>
+      </div>
+
+      <div id="dpanel-greeks" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:11px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Vanna Exposure</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--purple);">+$490M</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;">IV rise = dealer buys</div></div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Charm Decay</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">-$520M</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;">EOD delta unwind</div></div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Net Dealer Flow</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">-$180M</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;">Net sell pressure</div></div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">25D Risk Reversal</div><div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--red);">-3.2%</div><div style="font-size:11px;color:var(--text-dim);margin-top:3px;">Heavy put skew</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">IV Term Structure</div>
+            <div style="position:relative;width:100%;height:200px;"><canvas id="chartIVTerm2"></canvas></div>
+          </div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">25-Delta Risk Reversal Skew</div>
+            <div style="position:relative;width:100%;height:200px;"><canvas id="chartSkew2"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="dpanel-seasonal" style="display:none;">
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;margin-bottom:11px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Gold Seasonal — 10-Year Avg vs 2026 YTD</div>
+          <div style="position:relative;width:100%;height:240px;"><canvas id="chartSeasonal2"></canvas></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">YTD Performance</div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">January 2026</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);">+4.20%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">February 2026</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);">+3.80%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">March 2026</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);">+2.60%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">April 2026 MTD</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--red);">-1.80%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="font-size:12px;color:var(--text);font-weight:500;">YTD Total</span><span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--green);">+8.52%</span></div>
+          </div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Seasonal Context</div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">10yr April avg</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);">+0.80%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);">Best seasonal month</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);">August (+2.4%)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="font-size:12px;color:var(--text);font-weight:500;">1-Year return</span><span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--green);">+42.64%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="dpanel-levels" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px;">
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Options Structure Levels</div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);background:rgba(255,140,66,.09);border-radius:5px;padding:6px 8px;margin:0 -8px 4px;"><span style="font-size:11px;color:#ff8c42;font-family:'DM Mono',monospace;">Gamma Flip / Max Pain</span><span style="font-family:'DM Mono',monospace;font-size:14px;font-weight:700;" id="dash-flip2">--</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);font-family:'DM Mono',monospace;">Call Wall (resistance)</span><span style="font-family:'DM Mono',monospace;font-size:14px;font-weight:700;color:var(--blue);" id="dash-cwall2">--</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);"><span style="font-size:11px;color:var(--text-dim);font-family:'DM Mono',monospace;">Put Wall (support)</span><span style="font-family:'DM Mono',monospace;font-size:14px;font-weight:700;color:var(--red);" id="dash-pwall2">--</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="font-size:11px;color:var(--text-dim);font-family:'DM Mono',monospace;">Current Gold Price</span><span style="font-family:'DM Mono',monospace;font-size:14px;font-weight:700;color:var(--green);" id="dash-price2">--</span></div>
+          </div>
+          <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Signal Summary</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);"><div style="width:8px;height:8px;border-radius:50%;background:#ff8c42;flex-shrink:0;"></div><span style="font-size:12px;color:var(--text);flex:1;">Gamma Regime</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:#ff8c42;">FLIPPING</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);"><div style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0;"></div><span style="font-size:12px;color:var(--text);flex:1;">Delta Volume</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--red);">HEAVY SELL</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;"></div><span style="font-size:12px;color:var(--text);flex:1;">COT Commercials</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--green);">ADDING LONG</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);"><div style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0;"></div><span style="font-size:12px;color:var(--text);flex:1;">Dark Pool Bias</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--red);">62% SELL</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0;"></div><span style="font-size:12px;color:var(--text);flex:1;">Vanna Flow</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--purple);">BUY PRESSURE</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;"></div><span style="font-size:12px;color:var(--text);flex:1;">Seasonal Bias</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--green);">BULLISH</span></div>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px;">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Level Map — Price Ladder</div>
+          <div style="position:relative;width:100%;height:200px;"><canvas id="chartLevelMap2"></canvas></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- END INSTITUTIONAL DASHBOARD -->
+
   <div class="panel" style="padding:0;overflow:hidden;">
     <div style="padding:14px 22px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div class="ptitle" style="margin:0;"><div class="ldot"></div>Live MGC gold futures chart</div>
+      <div class="ptitle" style="margin:0;"><div class="ldot"></div>Live gold chart</div>
       <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);">15 min — XAUUSD spot (tracks futures)</div>
     </div>
     <div id="tv-chart" style="height:420px;"></div>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script type="text/javascript">
     new TradingView.widget({
-      container_id: "tv-chart",
-      symbol: "OANDA:XAUUSD",
-      interval: "15",
-      timezone: "America/New_York",
-      theme: "dark",
-      style: "1",
-      locale: "en",
-      toolbar_bg: "#141414",
-      enable_publishing: false,
-      hide_top_toolbar: false,
-      hide_legend: false,
-      save_image: false,
-      backgroundColor: "#0d0d0d",
-      gridColor: "rgba(212,168,71,0.05)",
-      width: "100%",
-      height: 420,
-      studies: ["RSI@tv-basicstudies","Volume@tv-basicstudies"]
+      container_id:"tv-chart",symbol:"OANDA:XAUUSD",interval:"15",
+      timezone:"America/New_York",theme:"dark",style:"1",locale:"en",
+      toolbar_bg:"#141414",enable_publishing:false,hide_top_toolbar:false,
+      save_image:false,backgroundColor:"#0d0d0d",width:"100%",height:420,
+      studies:["RSI@tv-basicstudies","Volume@tv-basicstudies"]
     });
     </script>
   </div>
 
-  <!-- PRICE LADDER -->
   <div class="panel" id="ladder-panel">
-    <div class="ptitle"><div class="adot"></div>Key price levels — auto updated from options data</div>
-    <div id="ladder-content">
-      <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text-dim);">Loading levels...</div>
-    </div>
+    <div class="ptitle"><div class="adot"></div>Key price levels — auto updated</div>
+    <div id="ladder-content"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text-dim);">Loading levels...</div></div>
   </div>
+
   <div class="section">
     <div class="shdr"><span class="sbadge tag-blue">Step 1</span><span class="stitle">Market context</span><span class="scomplete" id="s1c">0/3</span></div>
     <div class="citem" onclick="tog(this,1)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Check for major news events today</div><div class="inote">Fed, CPI, NFP, geopolitical — avoid trading 30 min before and after any major release</div></div><span class="itag tag-red">must do</span></div>
-    <div class="citem" onclick="tog(this,1)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Review overnight gold range and direction shown above</div><div class="inote">Wide overnight range = elevated volatility. Consider smaller size. Check if price gapped at open.</div></div><span class="itag tag-blue">auto</span></div>
+    <div class="citem" onclick="tog(this,1)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Review overnight gold range and direction shown above</div><div class="inote">Wide overnight range = elevated volatility. Consider smaller size.</div></div><span class="itag tag-blue">auto</span></div>
     <div class="citem" onclick="tog(this,1)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Confirm DXY signal shown above and plan accordingly</div><div class="inote">DXY up = gold headwind, favor shorts. DXY down = gold tailwind, favor longs.</div></div><span class="itag tag-blue">auto</span></div>
   </div>
 
-  <!-- STEP 2 -->
   <div class="section">
     <div class="shdr"><span class="sbadge tag-amber">Step 2</span><span class="stitle">Options intelligence</span><span class="scomplete" id="s2c">0/4</span></div>
-    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Review PCR shown above and note the bias</div><div class="inote">Below 0.7 = strongly bullish. 0.7-1.0 = neutral bullish. Above 1.0 = bearish. Auto-pulled from GLD.</div></div><span class="itag tag-amber">auto</span></div>
-    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Mark the call wall on your chart — multiply GLD price by 10 for gold futures</div><div class="inote">This is your resistance ceiling today. Auto-pulled from GLD options chain.</div></div><span class="itag tag-amber">auto</span></div>
-    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Mark the put wall on your chart — multiply GLD price by 10 for gold futures</div><div class="inote">This is your support floor today. Strong bounce zone especially in the last week before expiry.</div></div><span class="itag tag-amber">auto</span></div>
-    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Note max pain and days until expiry shown above</div><div class="inote">Under 5 days to expiry = max pain is the strongest magnet. Use as primary TP target this week.</div></div><span class="itag tag-amber">auto</span></div>
+    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Review PCR shown above and note the bias</div><div class="inote">Below 0.7 = strongly bullish. 0.7-1.0 = neutral bullish. Above 1.0 = bearish.</div></div><span class="itag tag-amber">auto</span></div>
+    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Mark the call wall on your chart</div><div class="inote">This is your resistance ceiling today. Auto-pulled from GLD options chain.</div></div><span class="itag tag-amber">auto</span></div>
+    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Mark the put wall on your chart</div><div class="inote">This is your support floor today. Strong bounce zone especially near expiry.</div></div><span class="itag tag-amber">auto</span></div>
+    <div class="citem" onclick="tog(this,2)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Note max pain and days until expiry shown above</div><div class="inote">Under 5 days to expiry = max pain is the strongest magnet. Use as primary TP target.</div></div><span class="itag tag-amber">auto</span></div>
   </div>
 
-  <!-- STEP 3 -->
   <div class="section">
     <div class="shdr"><span class="sbadge tag-purple">Step 3</span><span class="stitle">Fed watch</span><span class="scomplete" id="s3c">0/3</span></div>
     <div class="citem" onclick="tog(this,3)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Check CME FedWatch and select rate expectation above</div><div class="inote">Above 60% cut probability = bullish gold. Below 30% = bearish gold.</div></div><span class="itag tag-purple">macro</span></div>
@@ -236,7 +478,6 @@
     <div class="citem" onclick="tog(this,3)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Fed bias agrees with your planned trade direction</div><div class="inote">Cuts expected and going long = high confluence. Hikes expected and going short = high confluence.</div></div><span class="itag tag-purple">macro</span></div>
   </div>
 
-  <!-- STEP 4 -->
   <div class="section">
     <div class="shdr"><span class="sbadge tag-green">Step 4</span><span class="stitle">Chart analysis — 30min then 15min</span><span class="scomplete" id="s4c">0/4</span></div>
     <div class="citem" onclick="tog(this,4)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Identify the 30min swing high and swing low</div><div class="inote">This is your HTF leg. Fib retracement goes from this swing high to swing low.</div></div><span class="itag tag-green">chart</span></div>
@@ -245,7 +486,6 @@
     <div class="citem" onclick="tog(this,4)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">Mark recent 15min pivot highs and lows</div><div class="inote">These are your sweep targets for entry and TP levels. Minimum 3 candles each side.</div></div><span class="itag tag-green">chart</span></div>
   </div>
 
-  <!-- STEP 5 -->
   <div class="section">
     <div class="shdr"><span class="sbadge tag-red">Step 5</span><span class="stitle">Trade filter — before every entry</span><span class="scomplete" id="s5c">0/3</span></div>
     <div class="citem" onclick="tog(this,5)"><div class="cbox"><svg class="csv" width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="icontent"><div class="ititle">FVG direction agrees with PCR bias, DXY, and Fed outlook</div><div class="inote">All four agree = max confidence. Three of four = take it. Two or less = skip or reduce size.</div></div><span class="itag tag-red">must check</span></div>
@@ -262,219 +502,694 @@
 </div>
 
 <script>
-  const counts={1:0,2:0,3:0,4:0,5:0};
-  const totals={1:3,2:4,3:3,4:4,5:3};
-  const grand=17;
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const n=new Date();
-  document.getElementById('hdate').textContent=days[n.getDay()]+', '+months[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear();
+const ALPACA_KEY    = 'PKFU6MJS2V6HW3GMI4H5LVPX4Y';
+const ALPACA_SECRET = '9KEdGyUZrpQzsCgP4Y5Y2nKpiJHK7KhaGv865fn2t23y';
+const PROXY         = 'https://corsproxy.io/?';
 
-  async function fetchMarket() {
-    try {
-      const r = await fetch('/api/market');
-      const d = await r.json();
-      if (d.error) throw new Error(d.error);
-      const gc = d.gold.price - d.gold.prev;
-      const gcp = gc / d.gold.prev * 100;
-      document.getElementById('gp').textContent = '$' + d.gold.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-      document.getElementById('gc').textContent = (gc>=0?'+':'')+gc.toFixed(2)+' ('+(gcp>=0?'+':'')+gcp.toFixed(2)+'%)';
-      document.getElementById('gc').style.color = gc>=0?'var(--green)':'var(--red)';
-      document.getElementById('gr').textContent = '$'+d.gold.low.toLocaleString()+' / $'+d.gold.high.toLocaleString();
-      const dc = d.dxy.price - d.dxy.prev;
-      const dcp = dc / d.dxy.prev * 100;
-      document.getElementById('dp').textContent = d.dxy.price.toFixed(2);
-      document.getElementById('dc').textContent = (dc>=0?'+':'')+dc.toFixed(2)+' ('+(dcp>=0?'+':'')+dcp.toFixed(2)+'%)';
-      document.getElementById('dc').style.color = dc>=0?'var(--red)':'var(--green)';
-      if (dc > 0.15) {
-        document.getElementById('dd').textContent='UP'; document.getElementById('dd').style.color='var(--red)';
-        document.getElementById('di').textContent='Gold headwind'; document.getElementById('di').style.color='var(--red)';
-      } else if (dc < -0.15) {
-        document.getElementById('dd').textContent='DOWN'; document.getElementById('dd').style.color='var(--green)';
-        document.getElementById('di').textContent='Gold tailwind'; document.getElementById('di').style.color='var(--green)';
-      } else {
-        document.getElementById('dd').textContent='FLAT'; document.getElementById('dd').style.color='var(--amber)';
-        document.getElementById('di').textContent='Trade both sides'; document.getElementById('di').style.color='var(--amber)';
-      }
-      document.getElementById('mupd').textContent='Market updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    } catch(e) {
-      document.getElementById('mupd').innerHTML='<span class="etxt">Market error: '+e.message+'</span>';
-    }
+const counts={1:0,2:0,3:0,4:0,5:0};
+const totals={1:3,2:4,3:3,4:4,5:3};
+const grand=17;
+const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const n=new Date();
+document.getElementById('hdate').textContent=days[n.getDay()]+', '+months[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear();
+
+async function fetchMarket() {
+  try {
+    const [gRes,dRes] = await Promise.all([
+      fetch(PROXY+encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=2d')),
+      fetch(PROXY+encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?interval=1d&range=2d'))
+    ]);
+    const gd=await gRes.json(); const dd=await dRes.json();
+    const gq=gd.chart.result[0]; const dq=dd.chart.result[0];
+    const gc=gq.meta.regularMarketPrice-(gq.meta.previousClose||gq.meta.chartPreviousClose);
+    const gcp=gc/(gq.meta.previousClose||gq.meta.chartPreviousClose)*100;
+    document.getElementById('gp').textContent='$'+gq.meta.regularMarketPrice.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('gc').textContent=(gc>=0?'+':'')+gc.toFixed(2)+' ('+(gcp>=0?'+':'')+gcp.toFixed(2)+'%)';
+    document.getElementById('gc').style.color=gc>=0?'var(--green)':'var(--red)';
+    document.getElementById('gr').textContent='$'+gq.meta.regularMarketDayLow.toLocaleString()+' / $'+gq.meta.regularMarketDayHigh.toLocaleString();
+    const dc=dq.meta.regularMarketPrice-(dq.meta.previousClose||dq.meta.chartPreviousClose);
+    const dcp=dc/(dq.meta.previousClose||dq.meta.chartPreviousClose)*100;
+    document.getElementById('dp').textContent=dq.meta.regularMarketPrice.toFixed(2);
+    document.getElementById('dc').textContent=(dc>=0?'+':'')+dc.toFixed(2)+' ('+(dcp>=0?'+':'')+dcp.toFixed(2)+'%)';
+    document.getElementById('dc').style.color=dc>=0?'var(--red)':'var(--green)';
+    if(dc>0.15){document.getElementById('dd').textContent='UP';document.getElementById('dd').style.color='var(--red)';document.getElementById('di').textContent='Gold headwind';document.getElementById('di').style.color='var(--red)';}
+    else if(dc<-0.15){document.getElementById('dd').textContent='DOWN';document.getElementById('dd').style.color='var(--green)';document.getElementById('di').textContent='Gold tailwind';document.getElementById('di').style.color='var(--green)';}
+    else{document.getElementById('dd').textContent='FLAT';document.getElementById('dd').style.color='var(--amber)';document.getElementById('di').textContent='Trade both sides';document.getElementById('di').style.color='var(--amber)';}
+    document.getElementById('mupd').textContent='Market updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  } catch(e) {
+    document.getElementById('mupd').innerHTML='<span class="etxt">Market error: '+e.message+'</span>';
   }
+}
 
-  function renderLadder(d) {
-    if (!d.callWall && !d.putWall && !d.maxPain) {
-      document.getElementById('ladder-content').innerHTML = '<div style="font-family:DM Mono,monospace;font-size:12px;color:var(--text-dim);">Waiting for options data...</div>';
-      return;
-    }
+async function fetchOptions() {
+  document.getElementById('oupd').textContent='Fetching options...';
+  try {
+    const [gldRes, gcRes] = await Promise.all([
+      fetch(PROXY+encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/GLD?interval=1d&range=1d')),
+      fetch(PROXY+encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=1d'))
+    ]);
+    const gldData=await gldRes.json(); const gcData=await gcRes.json();
+    const gldPrice=gldData.chart.result[0].meta.regularMarketPrice;
+    const goldPrice=gcData.chart.result[0].meta.regularMarketPrice;
+    const multiplier=goldPrice/gldPrice;
 
-    const goldPrice = d.goldPrice || (d.gldPrice ? (d.gldPrice * (d.multiplier || 11.15)) : null);
+    const expiry=getNextFriday();
+    const expiryStr=expiry.toISOString().split('T')[0];
+    const daysLeft=Math.ceil((expiry-new Date())/(1000*60*60*24));
 
-    const levels = [];
-    if (d.callWall)  levels.push({ price: parseFloat(d.callWall),  label: 'Call wall — resistance', color: '#5b8fd4', bg: 'rgba(91,143,212,0.08)',  border: 'rgba(91,143,212,0.3)',  tag: 'CALLS',   note: 'Big money selling here. Price struggles to break above.' });
-    if (d.maxPain)   levels.push({ price: parseFloat(d.maxPain),   label: 'Max pain — options magnet', color: '#D4A847', bg: 'rgba(212,168,71,0.08)', border: 'rgba(212,168,71,0.3)', tag: 'MAX PAIN', note: 'Price gravitates here by expiration. Strongest last 5 days.' });
-    if (d.putWall)   levels.push({ price: parseFloat(d.putWall),   label: 'Put wall — support',    color: '#e05252', bg: 'rgba(224,82,82,0.08)',    border: 'rgba(224,82,82,0.3)',   tag: 'PUTS',    note: 'Big money buying here. Strong bounce zone.' });
-    if (goldPrice)   levels.push({ price: goldPrice,               label: 'Current gold price',    color: '#4caf7d', bg: 'rgba(76,175,125,0.08)',   border: 'rgba(76,175,125,0.3)',  tag: 'PRICE',   note: 'Live gold futures price.' });
+    const alpRes=await fetch(
+      PROXY+encodeURIComponent('https://data.alpaca.markets/v1beta1/options/snapshots/GLD?expiration_date='+expiryStr+'&limit=1000'),
+      {headers:{'APCA-API-KEY-ID':ALPACA_KEY,'APCA-API-SECRET-KEY':ALPACA_SECRET}}
+    );
+    if(!alpRes.ok) throw new Error('Alpaca '+alpRes.status);
+    const data=await alpRes.json();
+    const snapshots=data.snapshots||{};
 
-    levels.sort((a, b) => b.price - a.price);
-
-    const allPrices = levels.map(l => l.price).filter(Boolean);
-    const minPrice  = Math.min(...allPrices);
-    const maxPrice  = Math.max(...allPrices);
-    const range     = maxPrice - minPrice || 100;
-
-    let html = '<div style="position:relative;padding:8px 0;">';
-
-    levels.forEach((lvl, idx) => {
-      const pct    = range > 0 ? ((lvl.price - minPrice) / range * 100) : 50;
-      const isPrice = lvl.tag === 'PRICE';
-      html += `
-        <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;margin-bottom:8px;background:${lvl.bg};border:1px solid ${lvl.border};border-radius:8px;${isPrice ? 'border-left:3px solid '+lvl.color+';' : ''}">
-          <div style="width:4px;height:40px;background:${lvl.color};border-radius:2px;flex-shrink:0;"></div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">
-              <span style="font-family:'DM Mono',monospace;font-size:16px;font-weight:600;color:${lvl.color};">$${lvl.price.toLocaleString()}</span>
-              <span style="font-family:'DM Mono',monospace;font-size:10px;padding:2px 7px;border-radius:10px;background:${lvl.bg};color:${lvl.color};border:1px solid ${lvl.border};">${lvl.tag}</span>
-            </div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;">${lvl.label}</div>
-            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);">${lvl.note}</div>
-          </div>
-          <div style="width:80px;text-align:right;">
-            ${lvl.tag === 'CALLS' && d.callWallOI ? '<div style="font-family:DM Mono,monospace;font-size:11px;color:var(--text-dim);">'+Number(d.callWallOI).toLocaleString()+'</div><div style="font-family:DM Mono,monospace;font-size:10px;color:var(--text-dim);">open interest</div>' : ''}
-            ${lvl.tag === 'PUTS'  && d.putWallOI  ? '<div style="font-family:DM Mono,monospace;font-size:11px;color:var(--text-dim);">'+Number(d.putWallOI).toLocaleString()+'</div><div style="font-family:DM Mono,monospace;font-size:10px;color:var(--text-dim);">open interest</div>' : ''}
-            ${lvl.tag === 'MAX PAIN' ? '<div style="font-family:DM Mono,monospace;font-size:11px;color:var(--amber);">'+(d.daysLeft||'?')+' days</div><div style="font-family:DM Mono,monospace;font-size:10px;color:var(--text-dim);">to expiry</div>' : ''}
-          </div>
-        </div>`;
+    let calls={},puts={},totalCallOI=0,totalPutOI=0;
+    Object.entries(snapshots).forEach(([sym,snap])=>{
+      const oi=snap.openInterest||snap.open_interest||(snap.latestQuote&&snap.latestQuote.oi)||0;
+      let strike=snap.details?snap.details.strikePrice:null;
+      let type=snap.details?snap.details.optionType:null;
+      if(!strike||!type){const m=sym.match(/([CP])(\d{8})$/);if(m){type=m[1]==='C'?'call':'put';strike=parseInt(m[2])/1000;}}
+      if(!strike||!type)return;
+      const w=oi>0?oi:1;
+      if(type==='call'){calls[strike]=(calls[strike]||0)+w;totalCallOI+=w;}
+      else{puts[strike]=(puts[strike]||0)+w;totalPutOI+=w;}
     });
 
-    html += '</div>';
+    const pcr=totalCallOI>0?totalPutOI/totalCallOI:0;
+    const callArr=Object.entries(calls).map(([s,oi])=>({strike:parseFloat(s),oi})).sort((a,b)=>a.strike-b.strike);
+    const putArr=Object.entries(puts).map(([s,oi])=>({strike:parseFloat(s),oi})).sort((a,b)=>a.strike-b.strike);
+    const callsAbove=callArr.filter(c=>c.strike>=gldPrice).sort((a,b)=>b.oi-a.oi);
+    const putsBelow=putArr.filter(p=>p.strike<=gldPrice).sort((a,b)=>b.oi-a.oi);
+    const maxPain=calcMaxPain(calls,puts);
 
-    if (goldPrice && d.callWall && d.putWall) {
-      const cw = parseFloat(d.callWall);
-      const pw = parseFloat(d.putWall);
-      const mp = d.maxPain ? parseFloat(d.maxPain) : null;
-      const distToCall = cw - goldPrice;
-      const distToPut  = goldPrice - pw;
-      let bias = '';
-      if (goldPrice > mp) {
-        bias = '<span style="color:var(--red);">Price is ABOVE max pain — institutions may push price DOWN toward $'+mp+' by expiry</span>';
-      } else if (goldPrice < mp) {
-        bias = '<span style="color:var(--green);">Price is BELOW max pain — institutions may push price UP toward $'+mp+' by expiry</span>';
-      } else {
-        bias = '<span style="color:var(--amber);">Price is AT max pain — neutral zone</span>';
-      }
-      html += `<div style="background:rgba(212,168,71,0.06);border:1px solid rgba(212,168,71,0.2);border-radius:8px;padding:12px 16px;margin-top:4px;">
-        <div style="font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-bottom:6px;">Institutional bias today</div>
-        <div style="font-family:'DM Mono',monospace;font-size:12px;line-height:1.6;">${bias}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:4px;">
-          Distance to call wall: <span style="color:var(--blue);">$${distToCall.toFixed(0)}</span> &nbsp;|&nbsp;
-          Distance to put wall: <span style="color:var(--red);">$${distToPut.toFixed(0)}</span>
+    const allS=[...new Set([...callArr.map(c=>c.strike),...putArr.map(p=>p.strike)])].sort((a,b)=>a-b);
+    const strikeData=[...allS.filter(s=>s<=gldPrice).slice(-6),...allS.filter(s=>s>gldPrice).slice(0,6)]
+      .map(s=>({strike:s,futuresStrike:parseFloat((s*multiplier).toFixed(0)),callOI:calls[s]||0,putOI:puts[s]||0}));
+
+    const d={
+      pcr:parseFloat(pcr.toFixed(2)),
+      callWall:callsAbove.length>0?(callsAbove[0].strike*multiplier).toFixed(0):null,
+      callWallOI:callsAbove.length>0?callsAbove[0].oi:0,
+      putWall:putsBelow.length>0?(putsBelow[0].strike*multiplier).toFixed(0):null,
+      putWallOI:putsBelow.length>0?putsBelow[0].oi:0,
+      maxPain:maxPain?(maxPain*multiplier).toFixed(0):null,
+      gldPrice,goldPrice,multiplier,
+      expiry:expiry.toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+      daysLeft,strikes:strikeData
+    };
+
+    document.getElementById('opcr').textContent=d.pcr>0?d.pcr.toFixed(2):'N/A';
+    if(d.pcr>0)renderPCR(d.pcr);
+    document.getElementById('ocw').textContent=d.callWall?'$'+d.callWall:'--';
+    document.getElementById('ocwoi').textContent=d.callWallOI?Number(d.callWallOI).toLocaleString()+' OI':'--';
+    document.getElementById('opw').textContent=d.putWall?'$'+d.putWall:'--';
+    document.getElementById('opwoi').textContent=d.putWallOI?Number(d.putWallOI).toLocaleString()+' OI':'--';
+    document.getElementById('omp').textContent=d.maxPain?'$'+d.maxPain:'--';
+    document.getElementById('oexp').textContent=d.expiry||'--';
+    document.getElementById('odl').textContent=d.daysLeft?d.daysLeft+' days left':'--';
+    document.getElementById('odl').style.color=d.daysLeft<=5?'var(--red)':'var(--text-dim)';
+    renderStrikes(d.strikes,d.goldPrice);
+    renderLadder(d);
+    document.getElementById('oupd').textContent='Options updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  } catch(e) {
+    document.getElementById('oupd').innerHTML='<span class="etxt">Options error: '+e.message+'</span>';
+    document.getElementById('slist').innerHTML='<span class="etxt">Could not load options chain</span>';
+  }
+}
+
+function renderPCR(pcr) {
+  const el=document.getElementById('opcrb');
+  let text,bg,color;
+  if(pcr<0.7){text='STRONGLY BULLISH';bg='rgba(76,175,125,.15)';color='#4caf7d';}
+  else if(pcr<1.0){text='NEUTRAL BULLISH';bg='rgba(212,168,71,.15)';color='#D4A847';}
+  else if(pcr<1.3){text='NEUTRAL BEARISH';bg='rgba(212,168,71,.15)';color='#D4A847';}
+  else{text='STRONGLY BEARISH';bg='rgba(224,82,82,.15)';color='#e05252';}
+  el.innerHTML='<span class="dbadge" style="background:'+bg+';color:'+color+';border:1px solid '+color+'33">'+text+'</span>';
+}
+
+function renderStrikes(strikes,goldPrice) {
+  if(!strikes||!strikes.length){document.getElementById('slist').innerHTML='<span class="etxt">No strike data</span>';return;}
+  const maxOI=Math.max(...strikes.map(s=>Math.max(s.callOI,s.putOI)),1);
+  let html='<div style="display:flex;justify-content:space-between;font-family:DM Mono,monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;padding:0 4px;"><span style="width:60px;text-align:right;">Call OI</span><span style="flex:1;text-align:center;">Gold futures price</span><span style="width:60px;">Put OI</span></div>';
+  strikes.forEach(s=>{
+    const fs=s.futuresStrike||s.strike;
+    const isPrice=goldPrice&&Math.abs(fs-goldPrice)<(goldPrice*0.005);
+    html+='<div class="srow" style="'+(isPrice?'background:rgba(212,168,71,.05);border-radius:4px;':'')+'">';
+    html+='<div style="width:60px;text-align:right;font-size:11px;color:var(--blue)">'+(s.callOI>0?s.callOI.toLocaleString():'')+'</div>';
+    html+='<div class="bwrap"><div class="bfill" style="width:'+Math.round(s.callOI/maxOI*100)+'%;background:var(--blue);margin-left:auto;"></div></div>';
+    html+='<div style="width:70px;text-align:center;font-size:12px;'+(isPrice?'color:var(--gold);font-weight:700;':'')+'">$'+fs.toLocaleString()+(isPrice?' *':'')+'</div>';
+    html+='<div class="bwrap"><div class="bfill" style="width:'+Math.round(s.putOI/maxOI*100)+'%;background:var(--red);"></div></div>';
+    html+='<div style="width:60px;font-size:11px;color:var(--red)">'+(s.putOI>0?s.putOI.toLocaleString():'')+'</div>';
+    html+='</div>';
+  });
+  document.getElementById('slist').innerHTML=html;
+}
+
+function renderLadder(d) {
+  if(!d.callWall&&!d.putWall&&!d.maxPain){document.getElementById('ladder-content').innerHTML='<div style="font-family:DM Mono,monospace;font-size:12px;color:var(--text-dim);">Waiting for options data...</div>';return;}
+  const gp=d.goldPrice||null;
+  const levels=[];
+  if(d.callWall) levels.push({price:parseFloat(d.callWall),label:'Call wall — resistance',color:'#5b8fd4',bg:'rgba(91,143,212,0.08)',border:'rgba(91,143,212,0.3)',tag:'CALLS',note:'Big money selling here. Price struggles to break above.',oi:d.callWallOI});
+  if(d.maxPain)  levels.push({price:parseFloat(d.maxPain), label:'Max pain — options magnet',color:'#D4A847',bg:'rgba(212,168,71,0.08)',border:'rgba(212,168,71,0.3)',tag:'MAX PAIN',note:'Price gravitates here by expiration. Strongest last 5 days.',dl:d.daysLeft});
+  if(d.putWall)  levels.push({price:parseFloat(d.putWall), label:'Put wall — support',color:'#e05252',bg:'rgba(224,82,82,0.08)',border:'rgba(224,82,82,0.3)',tag:'PUTS',note:'Big money buying here. Strong bounce zone.',oi:d.putWallOI});
+  if(gp)         levels.push({price:gp,label:'Current gold price',color:'#4caf7d',bg:'rgba(76,175,125,0.08)',border:'rgba(76,175,125,0.3)',tag:'PRICE',note:'Live gold futures price.'});
+  levels.sort((a,b)=>b.price-a.price);
+  let html='<div style="position:relative;padding:8px 0;">';
+  levels.forEach(lvl=>{
+    html+=`<div style="display:flex;align-items:center;gap:14px;padding:10px 14px;margin-bottom:8px;background:${lvl.bg};border:1px solid ${lvl.border};border-radius:8px;">
+      <div style="width:4px;height:40px;background:${lvl.color};border-radius:2px;flex-shrink:0;"></div>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">
+          <span style="font-family:'DM Mono',monospace;font-size:16px;font-weight:600;color:${lvl.color};">$${lvl.price.toLocaleString()}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;padding:2px 7px;border-radius:10px;background:${lvl.bg};color:${lvl.color};border:1px solid ${lvl.border};">${lvl.tag}</span>
         </div>
-      </div>`;
-    }
-
-    document.getElementById('ladder-content').innerHTML = html;
+        <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;">${lvl.label}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);">${lvl.note}</div>
+      </div>
+      <div style="width:80px;text-align:right;">
+        ${lvl.oi?'<div style="font-family:DM Mono,monospace;font-size:11px;color:var(--text-dim);">'+Number(lvl.oi).toLocaleString()+'</div><div style="font-family:DM Mono,monospace;font-size:10px;color:var(--text-dim);">open interest</div>'  :''}
+        ${lvl.dl?'<div style="font-family:DM Mono,monospace;font-size:11px;color:var(--amber);">'+lvl.dl+' days</div><div style="font-family:DM Mono,monospace;font-size:10px;color:var(--text-dim);">to expiry</div>':''}
+      </div>
+    </div>`;
+  });
+  if(gp&&d.callWall&&d.putWall){
+    const cw=parseFloat(d.callWall),pw=parseFloat(d.putWall),mp=d.maxPain?parseFloat(d.maxPain):null;
+    let bias=mp?(gp>mp?'<span style="color:var(--red);">Price is ABOVE max pain — institutions may push DOWN toward $'+mp.toLocaleString()+' by expiry</span>':gp<mp?'<span style="color:var(--green);">Price is BELOW max pain — institutions may push UP toward $'+mp.toLocaleString()+' by expiry</span>':'<span style="color:var(--amber);">Price is AT max pain — neutral zone</span>'):'';
+    html+=`<div style="background:rgba(212,168,71,0.06);border:1px solid rgba(212,168,71,0.2);border-radius:8px;padding:12px 16px;margin-top:4px;">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-bottom:6px;">Institutional bias today</div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;line-height:1.6;">${bias}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:4px;">Distance to call wall: <span style="color:var(--blue);">$${(cw-gp).toFixed(0)}</span> &nbsp;|&nbsp; Distance to put wall: <span style="color:var(--red);">$${(gp-pw).toFixed(0)}</span></div>
+    </div>`;
   }
+  html+='</div>';
+  document.getElementById('ladder-content').innerHTML=html;
+}
 
-  async function fetchOptions() {
-    document.getElementById('oupd').textContent='Fetching options...';
-    try {
-      const r = await fetch('/api/options');
-      const d = await r.json();
-      if (d.error) throw new Error(d.error);
-      document.getElementById('opcr').textContent = d.pcr > 0 ? d.pcr.toFixed(2) : 'N/A';
-      if (d.pcr > 0) renderPCR(d.pcr);
-      document.getElementById('ocw').textContent   = d.callWall  ? '$'+d.callWall  : '--';
-      document.getElementById('ocwoi').textContent = d.callWallOI? d.callWallOI.toLocaleString()+' OI' : '--';
-      document.getElementById('opw').textContent   = d.putWall   ? '$'+d.putWall   : '--';
-      document.getElementById('opwoi').textContent = d.putWallOI ? d.putWallOI.toLocaleString()+' OI'  : '--';
-      document.getElementById('omp').textContent   = d.maxPain   ? '$'+d.maxPain   : '--';
-      document.getElementById('oexp').textContent = d.expiry || '--';
-      document.getElementById('odl').textContent  = d.daysLeft  ? d.daysLeft+' days left'    : '--';
-      document.getElementById('odl').style.color  = d.daysLeft<=5?'var(--red)':'var(--text-dim)';
-      renderStrikes(d.strikes, d.gldPrice, d.multiplier, d.goldPrice);
-      renderLadder(d);
-      document.getElementById('oupd').textContent='Options updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    } catch(e) {
-      document.getElementById('oupd').innerHTML='<span class="etxt">Options error: '+e.message+'</span>';
-      document.getElementById('slist').innerHTML='<span class="etxt">Could not load options chain</span>';
-    }
-  }
+function getNextFriday(){const d=new Date();while(d.getDay()!==5)d.setDate(d.getDate()+1);return new Date(d);}
 
-  function renderPCR(pcr) {
-    const el=document.getElementById('opcrb');
-    let text,bg,color;
-    if      (pcr<0.7) {text='STRONGLY BULLISH';bg='rgba(76,175,125,.15)';color='#4caf7d';}
-    else if (pcr<1.0) {text='NEUTRAL BULLISH'; bg='rgba(212,168,71,.15)'; color='#D4A847';}
-    else if (pcr<1.3) {text='NEUTRAL BEARISH'; bg='rgba(212,168,71,.15)'; color='#D4A847';}
-    else              {text='STRONGLY BEARISH';bg='rgba(224,82,82,.15)';  color='#e05252';}
-    el.innerHTML='<span class="dbadge" style="background:'+bg+';color:'+color+';border:1px solid '+color+'33">'+text+'</span>';
-  }
+function calcMaxPain(calls,puts){
+  const all=[...new Set([...Object.keys(calls),...Object.keys(puts)])].map(Number).sort((a,b)=>a-b);
+  let minPain=Infinity,best=all[0]||0;
+  all.forEach(t=>{
+    let pain=0;
+    Object.entries(calls).forEach(([s,oi])=>{const st=parseFloat(s);if(t>st)pain+=(t-st)*oi;});
+    Object.entries(puts).forEach(([s,oi])=>{const st=parseFloat(s);if(t<st)pain+=(st-t)*oi;});
+    if(pain<minPain){minPain=pain;best=t;}
+  });
+  return best;
+}
 
-  function renderStrikes(strikes, gldPrice, multiplier, goldPrice) {
-    if (!strikes || !strikes.length) { document.getElementById('slist').innerHTML='<span class="etxt">No strike data</span>'; return; }
-    const mult = multiplier || 11.15;
-    const gp   = goldPrice || (gldPrice * mult);
-    const maxOI = Math.max(...strikes.map(s=>Math.max(s.callOI,s.putOI)),1);
-    let html = '<div style="display:flex;justify-content:space-between;font-family:DM Mono,monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;padding:0 4px;"><span style="width:60px;text-align:right;">Call OI</span><span style="flex:1;text-align:center;">Gold futures price</span><span style="width:60px;">Put OI</span></div>';
-    strikes.forEach(s => {
-      const fs = s.futuresStrike || parseFloat((s.strike * mult).toFixed(0));
-      const isPrice = Math.abs(fs - gp) < (gp * 0.005);
-      html += '<div class="srow" style="'+(isPrice?'background:rgba(212,168,71,.05);border-radius:4px;':'')+'">';
-      html += '<div style="width:60px;text-align:right;font-size:11px;color:var(--blue)">'+(s.callOI>0?s.callOI.toLocaleString():'')+'</div>';
-      html += '<div class="bwrap"><div class="bfill" style="width:'+Math.round(s.callOI/maxOI*100)+'%;background:var(--blue);margin-left:auto;"></div></div>';
-      html += '<div style="width:70px;text-align:center;font-size:12px;'+(isPrice?'color:var(--gold);font-weight:700;':'')+'">$'+fs.toLocaleString()+(isPrice?' *':'')+'</div>';
-      html += '<div class="bwrap"><div class="bfill" style="width:'+Math.round(s.putOI/maxOI*100)+'%;background:var(--red);"></div></div>';
-      html += '<div style="width:60px;font-size:11px;color:var(--red)">'+(s.putOI>0?s.putOI.toLocaleString():'')+'</div>';
-      html += '</div>';
-    });
-    document.getElementById('slist').innerHTML = html;
-  }
+function tog(el,sec){
+  const cb=el.querySelector('.cbox'),cm=el.querySelector('.csv'),tx=el.querySelector('.ititle');
+  const checked=cb.classList.contains('checked');
+  cb.classList.toggle('checked',!checked);cm.classList.toggle('show',!checked);tx.classList.toggle('done',!checked);
+  counts[sec]+=checked?-1:1;
+  document.getElementById('s'+sec+'c').textContent=counts[sec]+'/'+totals[sec];
+  updateProg();
+}
 
-  function tog(el,sec) {
-    const cb=el.querySelector('.cbox'),cm=el.querySelector('.csv'),tx=el.querySelector('.ititle');
-    const checked=cb.classList.contains('checked');
-    cb.classList.toggle('checked',!checked); cm.classList.toggle('show',!checked); tx.classList.toggle('done',!checked);
-    counts[sec]+=checked?-1:1;
-    document.getElementById('s'+sec+'c').textContent=counts[sec]+'/'+totals[sec];
-    updateProg();
-  }
+function updateProg(){
+  const done=Object.values(counts).reduce((a,b)=>a+b,0);
+  document.getElementById('pcnt').textContent=done+' / '+grand;
+  const pct=Math.round(done/grand*100);
+  document.getElementById('pbar').style.width=pct+'%';
+  document.getElementById('ppct').textContent=pct+'% done';
+  document.getElementById('cmsg').classList.toggle('show',done===grand);
+}
 
-  function updateProg() {
-    const done=Object.values(counts).reduce((a,b)=>a+b,0);
-    document.getElementById('pcnt').textContent=done+' / '+grand;
-    const pct=Math.round(done/grand*100);
-    document.getElementById('pbar').style.width=pct+'%';
-    document.getElementById('ppct').textContent=pct+'% done';
-    document.getElementById('cmsg').classList.toggle('show',done===grand);
-  }
+function updateFed(){
+  const v=document.getElementById('rexp').value,el=document.getElementById('fbias');
+  if(!v){el.textContent='Select above';el.style.color='var(--text-dim)';return;}
+  if(v==='cut'){el.textContent='Bullish gold';el.style.color='var(--green)';}
+  if(v==='hold'){el.textContent='Neutral';el.style.color='var(--amber)';}
+  if(v==='hike'){el.textContent='Bearish gold';el.style.color='var(--red)';}
+}
 
-  function updateFed() {
-    const v=document.getElementById('rexp').value,el=document.getElementById('fbias');
-    if (!v){el.textContent='Select above';el.style.color='var(--text-dim)';return;}
-    if (v==='cut') {el.textContent='Bullish gold';el.style.color='var(--green)';}
-    if (v==='hold'){el.textContent='Neutral';     el.style.color='var(--amber)';}
-    if (v==='hike'){el.textContent='Bearish gold';el.style.color='var(--red)';}
-  }
-
-  function resetAll() {
-    if (!confirm('Reset for new session?')) return;
-    document.querySelectorAll('.cbox').forEach(cb=>cb.classList.remove('checked'));
-    document.querySelectorAll('.csv').forEach(cm=>cm.classList.remove('show'));
-    document.querySelectorAll('.ititle').forEach(tx=>tx.classList.remove('done'));
-    document.querySelector('.notes').value='';
-    document.getElementById('rexp').value='';
-    document.getElementById('fdate').value='';
-    document.getElementById('fbias').textContent='Select above';
-    document.getElementById('fbias').style.color='var(--text-dim)';
-    Object.keys(counts).forEach(k=>{counts[k]=0;document.getElementById('s'+k+'c').textContent='0/'+totals[k];});
-    updateProg();
-    fetchAll();
-  }
-
-  async function fetchAll() { await Promise.all([fetchMarket(), fetchOptions()]); }
+function resetAll(){
+  if(!confirm('Reset for new session?'))return;
+  document.querySelectorAll('.cbox').forEach(cb=>cb.classList.remove('checked'));
+  document.querySelectorAll('.csv').forEach(cm=>cm.classList.remove('show'));
+  document.querySelectorAll('.ititle').forEach(tx=>tx.classList.remove('done'));
+  document.querySelector('.notes').value='';
+  document.getElementById('rexp').value='';
+  document.getElementById('fdate').value='';
+  document.getElementById('fbias').textContent='Select above';
+  document.getElementById('fbias').style.color='var(--text-dim)';
+  Object.keys(counts).forEach(k=>{counts[k]=0;document.getElementById('s'+k+'c').textContent='0/'+totals[k];});
+  updateProg();
   fetchAll();
-  setInterval(fetchAll, 5*60*1000);
+}
+
+async function fetchAll(){await Promise.all([fetchMarket(),fetchOptions()]);}
+fetchAll();
+setInterval(fetchAll,5*60*1000);
 </script>
-</body>
-</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── Dashboard tab switching ──────────────────────────────────────
+function setDashTab(name, btn) {
+  ['dvol','gex','cot','darkpool','flow','greeks','seasonal','levels'].forEach(t => {
+    document.getElementById('dpanel-'+t).style.display = 'none';
+    document.getElementById('dtab-'+t).style.background = 'transparent';
+    document.getElementById('dtab-'+t).style.color = 'var(--text-dim)';
+    document.getElementById('dtab-'+t).style.fontWeight = 'normal';
+  });
+  document.getElementById('dpanel-'+name).style.display = 'block';
+  btn.style.background = 'var(--gold)';
+  btn.style.color = '#1a1400';
+  btn.style.fontWeight = '700';
+}
+
+// ── Update dashboard elements from live data ────────────────────
+function updateDashboard(goldPrice, goldChg, goldHigh, goldLow, optData) {
+  if (goldPrice) {
+    const chgSign = goldChg >= 0 ? '+' : '';
+    const chgPct = goldChg / (goldPrice - goldChg) * 100;
+    document.getElementById('dash-price').textContent = '$' + goldPrice.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('dash-price2').textContent = '$' + goldPrice.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('dash-chg').textContent = chgSign + goldChg.toFixed(2) + ' (' + chgSign + chgPct.toFixed(2) + '%)';
+    document.getElementById('dash-chg').style.color = goldChg >= 0 ? 'var(--green)' : 'var(--red)';
+    document.getElementById('dash-range').textContent = 'High $' + goldHigh.toLocaleString() + '  ·  Low $' + goldLow.toLocaleString() + '  ·  COMEX GCM26';
+  }
+  if (optData) {
+    if (optData.pcr > 0) {
+      document.getElementById('dash-pcr-val').textContent = optData.pcr.toFixed(2);
+      document.getElementById('dash-pcr-val').style.color = optData.pcr > 1 ? 'var(--red)' : optData.pcr < 0.7 ? 'var(--green)' : 'var(--amber)';
+      document.getElementById('dash-pcr-sub').textContent = optData.pcr > 1 ? 'Put skew elevated' : optData.pcr < 0.7 ? 'Call skew elevated' : 'Balanced';
+    }
+    if (optData.maxPain) {
+      document.getElementById('dash-flip').textContent = '$' + parseFloat(optData.maxPain).toLocaleString();
+      document.getElementById('dash-flip2').textContent = '$' + parseFloat(optData.maxPain).toLocaleString();
+    }
+    if (optData.callWall) {
+      document.getElementById('dash-cwall').textContent = '$' + parseFloat(optData.callWall).toLocaleString();
+      document.getElementById('dash-cwall2').textContent = '$' + parseFloat(optData.callWall).toLocaleString();
+    }
+    if (optData.putWall) {
+      document.getElementById('dash-pwall').textContent = '$' + parseFloat(optData.putWall).toLocaleString();
+      document.getElementById('dash-pwall2').textContent = '$' + parseFloat(optData.putWall).toLocaleString();
+    }
+    if (optData.expiry) document.getElementById('dash-expiry').textContent = optData.expiry;
+    if (optData.daysLeft) {
+      document.getElementById('dash-dte').textContent = optData.daysLeft;
+      document.getElementById('dash-dte').style.color = optData.daysLeft <= 5 ? 'var(--red)' : 'var(--blue)';
+    }
+    updateLevelMapChart(optData);
+  }
+}
+
+// ── Chart.js shared config ───────────────────────────────────────
+const MONO2 = "'DM Mono', monospace";
+const GRID2 = 'rgba(255,255,255,0.05)';
+const TICK2 = '#7a7585';
+const TOOLTIP2 = {
+  backgroundColor:'#1a181e', borderColor:'rgba(255,140,66,.22)', borderWidth:1,
+  titleFont:{family:MONO2,size:11}, bodyFont:{family:MONO2,size:11},
+  titleColor:'#ff8c42', bodyColor:'#ede8d8'
+};
+const BASE2 = { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:TOOLTIP2} };
+const XA = {ticks:{color:TICK2,font:{family:MONO2,size:10}},grid:{color:GRID2}};
+const YA = {ticks:{color:TICK2,font:{family:MONO2,size:10}},grid:{color:GRID2}};
+
+const HOURS2 = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'];
+const BUY2   = [8200,7400,5800,4200,5600,6800,4400,5200,6400,7200,5800,4600,3800,4200];
+const SELL2  = [9400,11200,14600,18800,16200,12400,10800,8600,7200,9800,12400,10200,8800,11600];
+const CUMD2  = BUY2.map((b,i)=>b-SELL2[i]).reduce((acc,v,i)=>{acc.push((acc[i-1]||0)+v);return acc;},[]);
+const STRIKES2 = ['$4,500','$4,550','$4,600','$4,650','$4,700','$4,750','$4,800','$4,850','$4,900','$4,950','$5,000'];
+const GEX2 = [-0.28,-0.64,-1.30,-0.88,0.12,0.82,-0.44,-1.18,-0.72,-0.34,-0.14];
+
+let dashChartsInited = false;
+
+function initDashCharts() {
+  if (dashChartsInited) return;
+  dashChartsInited = true;
+
+  // Delta volume bars
+  const dvWrap = document.getElementById('dvBars2');
+  if (dvWrap) {
+    dvWrap.innerHTML = HOURS2.map((h,i) => {
+      const tot = BUY2[i]+SELL2[i];
+      const bp = (BUY2[i]/tot*100).toFixed(0);
+      const sp = (SELL2[i]/tot*100).toFixed(0);
+      const net = BUY2[i]-SELL2[i];
+      const nc = net>0?'var(--green)':'var(--red)';
+      return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);width:40px;flex-shrink:0;">${h}</span>
+        <div style="flex:1;height:16px;background:var(--bg2);border-radius:3px;overflow:hidden;display:flex;">
+          <span style="width:${bp}%;background:rgba(0,229,160,.65);border-radius:3px 0 0 3px;"></span>
+          <span style="width:${sp}%;background:rgba(255,77,106,.6);border-radius:0 3px 3px 0;"></span>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;min-width:46px;text-align:right;color:${nc};">${net>0?'+':''}${(net/1000).toFixed(1)}K</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Cumulative delta
+  new Chart(document.getElementById('chartCumDelta2'), {
+    type:'line', data:{labels:HOURS2,datasets:[{data:CUMD2,borderColor:'#f5c842',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#f5c842',tension:.4,fill:false}]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>(v>0?'+':'')+Math.round(v/1000)+'K'}}}}
+  });
+
+  // DV Phase
+  new Chart(document.getElementById('chartDVPhase2'), {
+    type:'bar', data:{labels:['Pre-Mkt','Open','Midday','PM'],datasets:[
+      {data:[12400,28600,18200,17600],backgroundColor:'rgba(0,229,160,.55)',borderWidth:1},
+      {data:[14800,44200,32400,27580],backgroundColor:'rgba(255,77,106,.48)',borderWidth:1}
+    ]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}
+  });
+
+  // GEX
+  new Chart(document.getElementById('chartGEX2'), {
+    type:'bar', data:{labels:STRIKES2,datasets:[{data:GEX2,
+      backgroundColor:GEX2.map((v,i)=>Math.abs(parseInt(STRIKES2[i].replace(/\D/g,''))-4700)<30?'rgba(255,140,66,.75)':v>0?'rgba(0,229,160,.75)':'rgba(255,77,106,.75)'),
+      borderWidth:1}]},
+    options:{...BASE2,scales:{x:{...XA,ticks:{...XA.ticks,maxRotation:45,autoSkip:false}},y:{...YA,ticks:{...YA.ticks,callback:v=>(v>0?'+':'')+v.toFixed(2)+'B'}}}}
+  });
+
+  // OI
+  new Chart(document.getElementById('chartOI2'), {
+    type:'bar', data:{labels:STRIKES2,datasets:[
+      {data:[2800,5400,9200,14000,28000,18000,38000,12000,6200,3000,1400],backgroundColor:'rgba(0,229,160,.52)',borderWidth:1},
+      {data:[22000,34000,62000,78000,52000,34000,20000,11000,5400,2600,1000],backgroundColor:'rgba(255,77,106,.44)',borderWidth:1}
+    ]},
+    options:{...BASE2,scales:{x:{...XA,ticks:{...XA.ticks,maxRotation:45,autoSkip:false}},y:{...YA,ticks:{...YA.ticks,callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}
+  });
+
+  // COT
+  new Chart(document.getElementById('chartCOT2'), {
+    type:'bar', data:{labels:['Commercials','Large Specs','Small Specs'],datasets:[
+      {data:[84220,0,4100],backgroundColor:'rgba(0,229,160,.62)',borderWidth:1},
+      {data:[0,-28440,0],backgroundColor:'rgba(255,77,106,.55)',borderWidth:1}
+    ]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>(v>0?'+':'')+Math.round(v/1000)+'K'}}}}
+  });
+
+  // COT History
+  const wks=['W-12','W-11','W-10','W-9','W-8','W-7','W-6','W-5','W-4','W-3','W-2','W-1'];
+  new Chart(document.getElementById('chartCOThist2'), {
+    type:'line', data:{labels:wks,datasets:[
+      {data:[62400,68200,71800,66400,58200,52800,61400,72600,78200,80400,82100,84220],borderColor:'#f5c842',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#f5c842',tension:.4,fill:false},
+      {data:[-18200,-22400,-19800,-24600,-28800,-32400,-30200,-28600,-26400,-24800,-27200,-28440],borderColor:'rgba(255,77,106,.8)',borderWidth:2,borderDash:[4,4],pointRadius:3,tension:.4,fill:false}
+    ]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>Math.round(v/1000)+'K'}}}}
+  });
+
+  // Dark Pool
+  const dpB=[2100,1800,1400,1100,1800,2400,1600,2000,2400,2800,2200,1800,1400,1600];
+  const dpS=[2400,3200,4100,5200,4800,3600,3200,2600,2200,3100,3800,3200,2800,3600];
+  new Chart(document.getElementById('chartDarkPool2'), {
+    type:'bar', data:{labels:HOURS2,datasets:[
+      {data:dpB,backgroundColor:'rgba(0,229,160,.58)',borderWidth:1},
+      {data:dpS,backgroundColor:'rgba(255,77,106,.52)',borderWidth:1}
+    ]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>v>=1000?(v/1000).toFixed(1)+'K':v}}}}
+  });
+
+  // Flow Split
+  new Chart(document.getElementById('chartFlowSplit2'), {
+    type:'bar', data:{labels:['4550P','4600P','4650P','4680P','4700P','4750C','4800C'],datasets:[
+      {data:[0,0,0,0,0,2100000,2800000],backgroundColor:'rgba(0,229,160,.55)',borderWidth:1},
+      {data:[6400000,8200000,14200000,18600000,9400000,0,0],backgroundColor:'rgba(255,77,106,.5)',borderWidth:1}
+    ]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>v>=1000000?'$'+(v/1000000).toFixed(1)+'M':v}}}}
+  });
+
+  // IV Term Structure
+  new Chart(document.getElementById('chartIVTerm2'), {
+    type:'line', data:{labels:['GCM26','GCN26','GCQ26','GCU26','GCV26','GCZ26'],datasets:[
+      {data:[18.4,17.8,17.2,16.8,16.4,16.0],borderColor:'#f5c842',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#f5c842',tension:.3},
+      {data:[14.2,13.8,13.4,13.2,13.0,12.8],borderColor:'rgba(91,159,255,.65)',borderWidth:2,borderDash:[5,4],pointRadius:4,tension:.3}
+    ]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>v.toFixed(1)+'%'},min:10,max:22}}}
+  });
+
+  // Skew
+  const skewD=Array.from({length:20},(_,i)=>`D-${20-i}`);
+  const skewV=[-0.4,-0.6,-0.5,-0.8,-1.0,-0.9,-1.2,-1.4,-1.6,-1.5,-1.8,-2.0,-1.9,-2.2,-2.4,-2.6,-2.5,-2.8,-3.0,-3.2];
+  new Chart(document.getElementById('chartSkew2'), {
+    type:'line', data:{labels:skewD,datasets:[{data:skewV,borderColor:'#f5c842',borderWidth:2.5,pointRadius:0,tension:.4,fill:false}]},
+    options:{...BASE2,scales:{x:{...XA,ticks:{...XA.ticks,maxTicksLimit:10}},y:{...YA,ticks:{...YA.ticks,callback:v=>v.toFixed(1)}}}}
+  });
+
+  // Seasonal
+  new Chart(document.getElementById('chartSeasonal2'), {
+    type:'bar', data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[
+      {type:'line',data:[4.2,3.8,2.6,-1.8,null,null,null,null,null,null,null,null],borderColor:'#f5c842',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#f5c842',tension:.3,spanGaps:false},
+      {data:[1.4,0.9,-0.2,0.8,2.0,0.5,-0.6,2.4,1.6,2.4,1.1,1.8],backgroundColor:'rgba(91,159,255,.4)',borderWidth:1}
+    ]},
+    options:{...BASE2,scales:{x:{...XA},y:{...YA,ticks:{...YA.ticks,callback:v=>(v>0?'+':'')+v.toFixed(1)+'%'}}}}
+  });
+}
+
+// ── LIVE GEX chart from Alpaca data ─────────────────────────────
+let gexChart = null;
+let oiChart  = null;
+
+function renderLiveGEX(gexByStrike, goldPrice) {
+  const canvas = document.getElementById('chartGEX2');
+  if (!canvas || !gexByStrike || !gexByStrike.length) return;
+
+  // Filter to strikes within 20% of current gold price
+  const filtered = gexByStrike.filter(s =>
+    s.futuresStrike >= goldPrice * 0.82 &&
+    s.futuresStrike <= goldPrice * 1.18
+  );
+  if (!filtered.length) return;
+
+  const labels = filtered.map(s => '$' + s.futuresStrike.toLocaleString());
+  const values = filtered.map(s => s.gex);
+  const colors = filtered.map(s => {
+    const dist = Math.abs(s.futuresStrike - goldPrice);
+    if (dist < goldPrice * 0.01) return 'rgba(255,140,66,.85)';
+    return s.gex >= 0 ? 'rgba(0,229,160,.75)' : 'rgba(255,77,106,.75)';
+  });
+
+  if (gexChart) { gexChart.destroy(); gexChart = null; }
+  gexChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: colors,
+        borderColor: colors.map(c => c.replace(/[\d.]+\)$/, '1)')),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      ...BASE2,
+      scales: {
+        x: { ...XA, ticks: { ...XA.ticks, maxRotation: 45, autoSkip: true, maxTicksLimit: 14 } },
+        y: { ...YA, ticks: { ...YA.ticks, callback: v => (v >= 0 ? '+' : '') + v.toFixed(1) + 'M' },
+          title: { display: true, text: 'GEX ($M)', color: TICK2, font: { family: MONO2, size: 10 } }
+        }
+      },
+      plugins: {
+        ...BASE2.plugins,
+        tooltip: {
+          ...TOOLTIP2,
+          callbacks: {
+            label: ctx => {
+              const s = filtered[ctx.dataIndex];
+              return [
+                'GEX: $' + ctx.raw.toFixed(2) + 'M',
+                'Call OI: ' + s.callOI.toLocaleString(),
+                'Put OI: ' + s.putOI.toLocaleString()
+              ];
+            }
+          }
+        }
+      }
+    }
+  });
+
+  const el = document.getElementById('gex-updated');
+  if (el) el.textContent = 'LIVE — updated ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+function renderLiveOI(oiChartData, goldPrice) {
+  const canvas = document.getElementById('chartOI2');
+  if (!canvas || !oiChartData || !oiChartData.length) return;
+
+  const labels   = oiChartData.map(s => '$' + s.futuresStrike.toLocaleString());
+  const callData = oiChartData.map(s => s.callOI);
+  const putData  = oiChartData.map(s => s.putOI);
+
+  if (oiChart) { oiChart.destroy(); oiChart = null; }
+  oiChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Call OI', data: callData, backgroundColor: 'rgba(0,229,160,.65)', borderColor: 'rgba(0,229,160,.9)', borderWidth: 1 },
+        { label: 'Put OI',  data: putData,  backgroundColor: 'rgba(255,77,106,.55)', borderColor: 'rgba(255,77,106,.82)', borderWidth: 1 }
+      ]
+    },
+    options: {
+      ...BASE2,
+      plugins: { ...BASE2.plugins, legend: { display: true, labels: { color: TICK2, font: { family: MONO2, size: 10 }, boxWidth: 10 } } },
+      scales: {
+        x: { ...XA, ticks: { ...XA.ticks, maxRotation: 45, autoSkip: true, maxTicksLimit: 16 } },
+        y: { ...YA, ticks: { ...YA.ticks, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'K' : v } }
+      }
+    }
+  });
+}
+
+// Hook into fetchOptions to also render live GEX and OI
+const _origFetchOpts = window.fetchOptions || fetchOptions;
+window.fetchOptions = async function() {
+  await _origFetchOpts();
+  // Try to get raw data by calling the API again for GEX/OI data
+  try {
+    const PROXY = 'https://corsproxy.io/?';
+    const [gldR, gcR] = await Promise.all([
+      fetch(PROXY + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/GLD?interval=1d&range=1d')),
+      fetch(PROXY + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=1d'))
+    ]);
+    const gldD  = await gldR.json();
+    const gcD   = await gcR.json();
+    const gldPx = gldD.chart.result[0].meta.regularMarketPrice;
+    const gcPx  = gcD.chart.result[0].meta.regularMarketPrice;
+    const mult  = gcPx / gldPx;
+
+    const expiry    = getNextFriday();
+    const expiryStr = expiry.toISOString().split('T')[0];
+
+    const alpR = await fetch(
+      PROXY + encodeURIComponent('https://data.alpaca.markets/v1beta1/options/snapshots/GLD?expiration_date=' + expiryStr + '&limit=1000'),
+      { headers: { 'APCA-API-KEY-ID': 'PKFU6MJS2V6HW3GMI4H5LVPX4Y', 'APCA-API-SECRET-KEY': '9KEdGyUZrpQzsCgP4Y5Y2nKpiJHK7KhaGv865fn2t23y' } }
+    );
+    if (!alpR.ok) return;
+    const alpData   = await alpR.json();
+    const snapshots = alpData.snapshots || {};
+
+    let calls = {}, puts = {}, callG = {}, putG = {};
+
+    Object.entries(snapshots).forEach(([sym, snap]) => {
+      const oi     = snap.openInterest || snap.open_interest || 0;
+      const gamma  = snap.greeks ? (snap.greeks.gamma || 0) : 0;
+      let strike   = snap.details ? snap.details.strikePrice : null;
+      let type     = snap.details ? snap.details.optionType  : null;
+      if (!strike || !type) {
+        const m = sym.match(/([CP])(\d{8})$/);
+        if (m) { type = m[1]==='C'?'call':'put'; strike = parseInt(m[2])/1000; }
+      }
+      if (!strike || !type) return;
+      const w = oi > 0 ? oi : 1;
+      if (type === 'call') {
+        calls[strike] = (calls[strike]||0)+w;
+        if (!callG[strike]) callG[strike]={g:0,n:0};
+        callG[strike].g += gamma*w; callG[strike].n += w;
+      } else {
+        puts[strike]  = (puts[strike] ||0)+w;
+        if (!putG[strike]) putG[strike]={g:0,n:0};
+        putG[strike].g += gamma*w; putG[strike].n += w;
+      }
+    });
+
+    const allS = [...new Set([...Object.keys(calls),...Object.keys(puts)])].map(Number).sort((a,b)=>a-b);
+
+    const gexByStrike = allS.map(s => {
+      const cg  = callG[s] ? callG[s].g / Math.max(callG[s].n,1) : 0;
+      const pg  = putG[s]  ? putG[s].g  / Math.max(putG[s].n,1)  : 0;
+      const coi = calls[s]||0, poi = puts[s]||0;
+      const gex = ((cg*coi) - (pg*poi)) * 100 * gldPx / 1e6;
+      return { strike:s, futuresStrike:parseFloat((s*mult).toFixed(0)), gex:parseFloat(gex.toFixed(3)), callOI:coi, putOI:poi };
+    });
+
+    const oiStrikes = allS.filter(s => s >= gldPx*0.88 && s <= gldPx*1.12);
+    const oiChartData = oiStrikes.map(s => ({
+      strike:s, futuresStrike:parseFloat((s*mult).toFixed(0)), callOI:calls[s]||0, putOI:puts[s]||0
+    }));
+
+    renderLiveGEX(gexByStrike, gcPx);
+    renderLiveOI(oiChartData, gcPx);
+    updateLevelMapChart({ callWall: document.getElementById('ocw').textContent.replace(/[$,]/g,''), putWall: document.getElementById('opw').textContent.replace(/[$,]/g,''), maxPain: document.getElementById('omp').textContent.replace(/[$,]/g,''), goldPrice: gcPx });
+
+  } catch(e) {
+    console.log('GEX/OI live render error:', e.message);
+  }
+};
+
+function getNextFriday() {
+  const d = new Date();
+  while (d.getDay()!==5) d.setDate(d.getDate()+1);
+  return new Date(d);
+}
+let levelMapChart = null;
+function updateLevelMapChart(optData) {
+  const canvas = document.getElementById('chartLevelMap2');
+  if (!canvas) return;
+  const cw = optData.callWall ? parseFloat(optData.callWall) : null;
+  const pw = optData.putWall  ? parseFloat(optData.putWall)  : null;
+  const mp = optData.maxPain  ? parseFloat(optData.maxPain)  : null;
+  const gp = optData.goldPrice || null;
+  if (!cw && !pw && !mp) return;
+
+  const labels = [];
+  const values = [];
+  const colors = [];
+  if (pw)  { labels.push('Put Wall');    values.push(pw); colors.push('rgba(255,77,106,.75)'); }
+  if (mp)  { labels.push('Max Pain');    values.push(mp); colors.push('rgba(255,140,66,.85)'); }
+  if (gp)  { labels.push('Gold Price');  values.push(gp); colors.push('rgba(255,200,50,.95)'); }
+  if (cw)  { labels.push('Call Wall');   values.push(cw); colors.push('rgba(0,229,160,.75)'); }
+
+  const minV = Math.min(...values) - 50;
+  const maxV = Math.max(...values) + 50;
+
+  if (levelMapChart) { levelMapChart.destroy(); levelMapChart = null; }
+  levelMapChart = new Chart(canvas, {
+    type:'bar',
+    data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace(/[\d.]+\)$/,'1)')),borderWidth:1}]},
+    options:{...BASE2,indexAxis:'y',scales:{
+      x:{...XA,min:minV,max:maxV,ticks:{...XA.ticks,callback:v=>'$'+v.toLocaleString()}},
+      y:{...YA}
+    }}
+  });
+}
+
+// Override fetchAll to also update dashboard
+const _origFetchAll = typeof fetchAll !== 'undefined' ? fetchAll : null;
+
+// Hook into market and options fetch to update dashboard
+const origFetchMarket = fetchMarket;
+window.fetchMarket = async function() {
+  await origFetchMarket();
+  // Dashboard price already updated via fetchMarket — get values from DOM
+  const priceEl = document.getElementById('gp');
+  const rangeEl = document.getElementById('gr');
+  if (priceEl && priceEl.textContent !== '--') {
+    document.getElementById('dash-price').textContent = priceEl.textContent;
+    document.getElementById('dash-price2').textContent = priceEl.textContent;
+    document.getElementById('dash-range').textContent = (rangeEl ? rangeEl.textContent : '') + '  ·  COMEX GCM26';
+    const chgEl = document.getElementById('gc');
+    if (chgEl) {
+      document.getElementById('dash-chg').textContent = chgEl.textContent;
+      document.getElementById('dash-chg').style.color = chgEl.style.color;
+    }
+  }
+};
+
+const origFetchOptions = fetchOptions;
+window.fetchOptions = async function() {
+  await origFetchOptions();
+  // Pull values from already-rendered DOM elements
+  const optData = {
+    pcr:      parseFloat(document.getElementById('opcr').textContent) || 0,
+    callWall: document.getElementById('ocw').textContent.replace('$','').replace(',','') || null,
+    putWall:  document.getElementById('opw').textContent.replace('$','').replace(',','') || null,
+    maxPain:  document.getElementById('omp').textContent.replace('$','').replace(',','') || null,
+    expiry:   document.getElementById('oexp').textContent || null,
+    daysLeft: parseInt(document.getElementById('odl').textContent) || null,
+    goldPrice: null
+  };
+  updateDashboard(null, null, null, null, optData);
+  initDashCharts();
+};
+</script>
+
